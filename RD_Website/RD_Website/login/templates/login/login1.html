@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="HEU" />
+		<!-- 作者 -->
+		<meta name="revised" content="HEU.v3, 2021/01/21" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>登录</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="shortcut icon" href="{% static 'login/image/index004.png' %}"/>{# 顶部导航栏图片 #}
+		<link rel="bookmark" href="{% static 'login/image/index004.png' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/base.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/iconfont.css' %}">
+		<script type="text/javascript" src="{% static 'login/framework/jquery-1.11.3.min.js' %}"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'login/layui/css/layui.css' %}">
+		<script type="text/javascript" src="{% static 'login/layui/layui.js' %}"></script>
+		<!-- 公共样式 结束 -->
+		
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/login1.css' %}">
+		<script type="text/javascript" src="{% static 'login/js/login1.js' %}"></script>
+	</head>
+
+	<body>
+		<div class="loginBg"></div>
+		<div class="login_main">
+			<div class="box">
+				<div class="left">
+					<img src="{% static 'login/image/index004.png' %}" /> {# 页面图片 #}
+					<p>HEU谣言检测</p>
+				</div>
+				<div class="right">
+
+					<form class="layui-form layui-form-pane" action="/login_new/" method="post">
+                        {% csrf_token %}
+                        {% if message %}
+                        <!--div class="login_warn">{{ message }}</div-->
+                            <button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal">{{ message }}</button>
+                        {% endif %}
+                        <div class="layui-form-item">
+							<label class="layui-form-label login_title"><i class="iconfont icon-gerenzhongxin-denglu"></i></label>
+							<div class="layui-input-block login_input">
+								<input type="text" name="user_id" lay-verify="user_id" autocomplete="off" placeholder="请输入您的用户名" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label login_title"><i class="iconfont icon-mima1"></i></label>
+							<div class="layui-input-block login_input">
+								<input type="password" name="user_password" lay-verify="user_password" autocomplete="off" placeholder="请输入密码" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<button class="layui-btn layui-btn-fluid login_but" lay-submit lay-filter="loginBut">登 录</button>
+						</div>
+						<!--div class="layui-form-item">
+							<input type="radio" name="identity" value="管理员" title="管理员" checked lay-filter="userType">
+							<input type="radio" name="identity" value="用户" title="用户" lay-filter="userType">
+						</div-->
+					</form>
+				</div>
+			</div>
+		</div>
+		<script>
+			layui.use('form', function() {
+				var form = layui.form;
+				//监听提交
+				form.on('submit(loginBut)', function(data) {
+					layer.msg(JSON.stringify(data.field));  //JSON.stringify(data.field)   这是表单中所有的数据
+					return true;
+				});
+				//监听用户类型，改变风格
+				<!--form.on('radio(userType)', function(data){
+				    if(data.value == "管理员"){
+						$(".loginBg").css("background","url('../../../static/login/images/login_sh_bg.jpg')");
+						$(".login_but").css("cssText", "background-color:#16c6f9 !important");
+					}
+					if(data.value == "用户"){
+						$(".loginBg").css("background","url('../../../static/login/images/login_admin_bg.jpg')");
+						$(".login_but").css("cssText", "background-color:#57c201 !important");
+					}
+
+				});-->
+			});
+		</script>
+	</body>
+
+</html>

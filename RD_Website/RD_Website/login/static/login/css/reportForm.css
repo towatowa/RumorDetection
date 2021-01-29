@@ -1,0 +1,126 @@
+*{
+	color: #415161;
+}
+.reportForm{
+	float: left;
+    width: 213px;
+    margin-right: 10px;
+    overflow: hidden;
+}
+.reportForm .typeBut{
+	display: block;
+	float: left;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 12px;
+    color: #415161;
+    border-top: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+    box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+	-webkit-box-sizing:border-box; /* Safari */
+}
+.reportForm .typeBut.active{
+    color: #FFF;
+    background-color: #13c19f;
+}
+.reportForm .bl{
+    border-left: 1px solid #e6e6e6;
+    border-radius: 19px 0 0 19px;
+}
+.reportForm .br{
+    border-radius: 0 19px 19px 0;
+}
+.exportBut{
+	float: right;
+}
+
+.reportForm_main{
+	border: 1px solid #efeff1;
+	border-bottom: 0;
+}
+
+.collectData{
+	background-color: #f8f9fd;
+}
+.collectData .layui-col-md6,.collectData .layui-col-md2{
+	height: 108px;
+	text-align: center;
+}
+.collectData .title{
+	line-height: 28px;
+	margin-top: 30px;
+	color: #96a6b6;
+    font-size: 13px;
+}
+.collectData .nums font{
+	color: #415161;
+    font-size: 22px;
+}
+.collectData .nums span{
+	color: #7b8aa1;
+}
+
+.collectData .br{
+    border-right: 1px solid #eee;
+}
+.dataTable{
+	border: 0 !important;
+}
+.dataTable th,.dataTable td{
+	padding: 15px 15px;
+}
+.dataTable th{
+	background-color: #eef1f9;
+	border: 0 !important;
+}
+.reportType_tj{
+	padding: 30px;
+}
+.pressBut{
+	padding: 5px 8px;
+	color: #415161;
+	cursor: pointer;
+}
+.pressBut.active{
+	background-color: #b7c0cc;
+	color: #FFF;
+	border-radius: 13px;
+}
+.changeRate{
+	width: 200px;
+	float: right;
+	text-align: center;
+}
+.changeRate .left{
+	height: 44px;
+	line-height: 44px;
+	font-size: 26px;
+	color: #415161;
+	border-right: 1px solid #ececec;
+}
+.changeRate .right{
+	height: 44px;
+	font-size: 13px;
+}
+.changeRate .right span{
+	line-height: 22px;
+	display: block;
+}
+.changeRate .right span.data{
+	color: #13c19f;
+}
+.changeRate .right span.data i{
+	color: #13c19f;
+}
+.changeRate .right span.data.up{
+	color: #c76d6e;
+}
+.changeRate .right span.data.up i{
+	color: #c76d6e;
+}

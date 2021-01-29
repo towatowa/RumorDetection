@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HEU谣言检测：主页</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <link rel="shortcut icon" href="{% static 'login/image/index004.png'%}"/>{# 顶部导航栏图片 #}
+    <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" >
+    <link href="{% static 'login/css/un_index.css'%}" rel="stylesheet"/>
+    <style>
+        .post{
+            margin-bottom: 5px;
+        }
+        li{ float:left; list-style:none}
+    </style>
+</head>
+<body style="position: relative;z-index: 0">
+    <div class="div01">
+         <h1 class="text-center">Rumor Detection</h1>
+         <p class="p1">中国互联网谣言检测平台</p>
+    </div>
+    <div>
+        <!--head col-sm-10 div所占宽度-->
+        <ul>
+            <li><a  href="/unindex/">首页</a></li>
+            <li><a href="/user_login/">谣言检测</a></li>
+        </ul>
+        <div class="div03">
+            <div class="div04">
+                <div class="dropdown">
+                <span class="span01" style="color: white">登录</span>
+                <div class="dropdown-content" >
+                    <p><a  href="/user_login/" style="color: black">用户</a></p>
+                    <p><a  href="/admin/" style="color: black">管理员</a></p>
+                </div>
+                </div>
+            </div>
+            <div class="div05">
+                <div class="dropdown">
+                <span class="span01" style="color: white">注册</span>
+                <div class="dropdown-content" >
+                    <p><a  href="/user_register/" style="color: black">用户</a></p>
+                    <p><a  href="/admin/" style="color: black">管理员</a></p>
+                </div>
+                </div>
+            </div>
+        </div>
+    <div class="div02" style="z-index: -1">
+        <ul class="ul03">
+            <h4 class="h001">辟谣资讯</h4>
+            <li class="li01"><p>云南维希有人核酸检测阳性?</p></li>
+            <li class="li01"><p>浙江缙云南顿菜场有冷冻食品检出新冠病毒阳性?</p></li>
+            <li class="li01"><p>浙江遂昌北界一销售点老板确诊新冠肺炎?</p></li>
+            <li class="li01"><p>江西九江出现1例确诊病例?</p></li>
+            <li class="li01"><p>山东青岛商丘路社区出现1例确诊病例?</p></li>
+            <li class="li01"><p>石家庄瞎转的一律被抓走隔离，每天每人四百元?</p></li>
+            <li class="li01"><p>天津经营性餐饮服务单位春节停业?</p></li>
+            <li class="li01"><p>石家庄周边将用大炮打药消毒?</p></li>
+        </ul>
+        <ul class="ul04">
+            <h4 class="h001">热点推荐</h4>
+            <a class="a001" href="/unindex/">
+                <img src="../../static/login/image/index008.jpeg" width="50%"  >
+            </a>
+            <li class="li02">
+                <p>
+                        《中华人民共和国民法典》被称为“社会生活的百科全书”，是新中国第一部以法典命名的法律，
+                    在法律体系中居于基础性地位，也是市场经济的基本法。
+                </p>
+            </li>
+        </ul>
+    </div>
+    </div>
+
+</body>
+</html>

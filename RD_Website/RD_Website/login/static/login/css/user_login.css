@@ -1,0 +1,75 @@
+body {
+  position:fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  min-width: 1000px;
+  z-index:-10;
+  zoom: 1;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-position: center 0;
+  background-image: url('../image/login003.png');
+}
+.form-login {
+  width: 100%;
+  max-width: 350px;
+  padding: 0 20px 20px 20px; /*内边距，上右下左*/
+
+}
+.form-login{
+  background:#FFFFFF;
+  margin:0 auto;
+  font-weight: 400;
+}
+.form-login .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+
+}
+.form-login .form-control:focus {
+  z-index: 2;
+}
+.form-login input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-login input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.div01{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.div02{
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+h3{
+  width: 350px;
+  height:50px;
+  padding: 10px;
+  margin:0 auto;
+  margin-top: 10%;
+  background:#0000FF;/*背景颜色红色*/
+  font-size:20px;/*字体bai大小18px*/
+  color:#FFFFFF;/*字体颜色黑du色*/
+}
+form a{
+  display: inline-block;
+  margin-top:25px;
+  font-size: 12px;
+  line-height: 10px;
+}

@@ -1,0 +1,71 @@
+.layui-form-label{
+	width: 100px;
+}
+
+.timePage{
+	width: 100%;
+}
+.timePage .time{
+	width: 100%;
+	padding-left: 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.timePage .time ul{
+	overflow: hidden;
+}
+.timePage .time ul li{
+	float: left;
+	height: 40px;
+	line-height: 40px;
+}
+.timePage .time ul li .iconfont{
+	float: left;
+	display: block;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	border: 1px solid #CCC;
+	color: #CCC;
+	border-radius: 50%;
+	text-align: center;
+	margin-top: 9px;
+	font-size: 12px;
+}
+.timePage .time ul li font{
+	float: left;
+	margin-left: 5px;
+	color: #666;
+}
+.timePage .time ul li span{
+	width: 160px;
+	float: left;
+	border-top: 1px solid #CCC;
+	margin: 0 5px;
+	margin-top: 19.5px;
+}
+.timePage .time ul li.active .iconfont{
+	border: 1px solid #FFD205;
+	background-color: #FFD205;
+	color: #FFF;
+}
+.timePage .time ul li.active font{
+	font-weight: 600;
+	color: #000000;
+}
+.timePage .time ul li.active span{
+	border-top: 1px solid #FFD205;
+}
+
+.timePage .page .one{
+	padding: 20px 30px;
+}
+.timePage .page .one .dis{
+	text-indent: 2em;
+	line-height: 24px;
+	color: #999;
+}
+.dlsQyj{
+	float: right;
+}

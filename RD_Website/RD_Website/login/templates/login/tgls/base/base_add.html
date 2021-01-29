@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/iconfont.css">
+		<script type="text/javascript" src="../../../../static/login/framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/layui/css/layui.css">
+		<script type="text/javascript" src="../../../../static/login/layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/jquery.mCustomScrollbar.css">
+		<script src="../../../../static/login/framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mousewheel.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../../../../static/login/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+			.layui-form{
+				margin-right: 30%;
+			}
+			.layui-form-label{
+				width: 100px;
+			}
+			.layui-input-block{
+				margin-left: 130px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="cBody">
+			<form id="addForm" class="layui-form" action="">
+				<div class="layui-form-item">
+					<label class="layui-form-label">分管名称</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" required lay-verify="required|ZHCheck" placeholder="例:穷在闹市银川(只允许输入中文)" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">地区</label>
+	                <div class="layui-input-inline">
+	                    <select name="provid" id="provid" lay-filter="provid">
+	                    </select>
+	                </div>
+	                <div class="layui-input-inline">
+	                    <select name="cityid" id="cityid" lay-filter="cityid">
+	                        <option value="">请选择市</option>
+	                    </select>
+	                </div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">负责人</label>
+					<div class="layui-input-inline shortInput">
+						<input type="text" name="realName" required lay-verify="required|ZHCheck" placeholder="例:张三(只允许输入中文)" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">备注</label>
+					<div class="layui-input-block">
+						<textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">是否开通</label>
+					<div class="layui-input-block">
+						<input type="radio" name="sex" value="nan" title="启用" checked>
+						<input type="radio" name="sex" value="nv" title="禁用">
+					</div>
+				</div>
+				<script>
+					//初始化加载radio选中状态
+//					$(function(){
+//						$('[name=sex]').each(function(i,item){  
+//							console.log($(item).val())
+//						    if($(item).val()=="nv"){  
+//						        $(item).prop('checked',true);
+//						    }  
+//						}); 
+//					})
+					function changeRadio(){
+						$('[name=sex]').each(function(i,item){  
+							console.log($(item).val())
+						    if($(item).val()=="nv"){  
+						        $(item).prop('checked',true);  
+						        layui.use('form',function(){  
+									var form = layui.form;
+							        form.render(); 
+							    });
+						    }  
+						}); 
+					}
+				</script>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">富文本编辑器</label>
+					<div class="layui-input-block">
+						<textarea id="editor" style="display: none;"></textarea>
+						<script>
+							layui.use('layedit', function() {
+								var layedit = layui.layedit;
+								//插入图片接口配置，要求接口返回的格式JSON如下
+								/*{
+								  "code": 0 //0表示成功，其它失败
+								  ,"msg": "" //提示信息 //一般上传失败后返回
+								  ,"data": {
+								    "src": "图片路径"
+								    ,"title": "图片名称" //可选
+								  }
+								}*/
+								layedit.set({
+									uploadImage: {
+										url: '' //接口url
+									}
+								});
+								layedit.build('editor', {
+									tool: [
+										'strong' //加粗
+										, 'italic' //斜体
+										, 'underline' //下划线
+										, 'del' //删除线
+										, '|' //分割线
+										, 'left' //左对齐
+										, 'center' //居中对齐
+										, 'right' //右对齐
+										, '|' //分割线
+										, 'link' //超链接
+										, 'unlink' //清除链接
+										, 'face' //表情
+										, 'image' //插入图片
+									]
+								}); //建立编辑器						
+							});
+						</script>
+					</div>
+				</div>
+				
+				
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						<a class="layui-btn" href="javascript:changeRadio()">radio</a>
+					</div>
+				</div>
+			</form>
+			
+			<!-- 三级省市 插件 -->
+    		<script src="../../../../static/login/framework/area.js"></script>
+			<script src="../../../../static/login/framework/province.js"></script>
+			<script>
+				layui.use('form', function() {
+					var form = layui.form;
+					//监听提交
+					form.on('submit(submitBut)', function(data) {
+						layer.msg(JSON.stringify(data.field));
+						return false;
+					});
+					form.verify({
+						//数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+					  	ZHCheck: [
+						    /^[\u0391-\uFFE5]+$/
+						    ,'只允许输入中文'
+					  	] 
+					});
+				});
+				//默认城市为：宁夏 - 银川
+		        var defaults = {
+		            s1: 'provid',
+		            s2: 'cityid',
+		            s3: 'areaid',
+		            v1: 510000,
+		            v2: 510100,
+		            v3: null
+		        };
+			</script>
+
+		</div>
+	</body>
+
+</html>

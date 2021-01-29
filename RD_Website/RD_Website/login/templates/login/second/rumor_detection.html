@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="HEU谣言检测" />
+		<!-- 作者 -->
+		<meta name="revised" content="HEU谣言检测.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>HEU谣言检测</title>
+
+        <link rel="shortcut icon" href="{% static 'login/image/index004.png'%}"/>{# 顶部导航栏图片 #}
+		<link rel="bookmark" href="{% static 'login/image/index004.png'%}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/base.css'%}">
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/iconfont.css'%}">
+		<script type="text/javascript" src="{% static 'login/framework/jquery-1.11.3.min.js'%}" ></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'login/layui/css/layui.css'%}">
+	    <!--[if lt IE 9]>
+	      	<script src="{% static 'login/framework/html5shiv.min.js'%}"></script>
+	      	<script src="{% static 'login/framework/respond.min.js'%}"></script>
+	    <![endif]-->
+		<script type="text/javascript" src="{% static 'login/layui/layui.js'%}"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="{% static 'login/css/jquery.mCustomScrollbar.css'%}">
+		<script src="{% static 'login/framework/jquery-ui-1.10.4.min.js'%}"></script>
+		<script src="{% static 'login/framework/jquery.mousewheel.min.js'%}"></script>
+		<script src="{% static 'login/framework/jquery.mCustomScrollbar.min.js'%}"></script>
+		<script src="{% static 'login/framework/cframe.js'%}"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+
+		<style>
+			.layui-table img {
+			    max-width: none;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+				<form class="layui-form" action="">
+					<div class="layui-form-item">
+						<div class="layui-input-inline">
+							<input type="text" name="name" required lay-verify="required" placeholder="输入谣言文件路径" autocomplete="off" class="layui-input">
+						</div>
+						<div>
+                            <button type="submit" class="layui-btn">导入谣言</button>
+                        </div>
+					</div>
+				</form>
+
+				<script>
+					layui.use('form', function() {
+						var form = layui.form;
+
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							layer.msg(JSON.stringify(data.field));
+							return false;
+						});
+					});
+				</script>
+			</div>
+
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>谣言id</th>
+						<th>谣言内容</th>
+						<th>检测结果</th>
+						<th>检测类型</th>
+						<th>检测时间</th>
+                        <th>传播路径</th>
+                        <th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for i in result %}
+					<tr>
+						<td>{{ i.id }}暂时没有数据</td>
+                        <td>{{ i.text }}暂时没有数据</td>
+                        <td>{{ i.label }}暂时没有数据</td>
+                        <td>{{ i.type }}暂时没有数据</td>
+                        <td>{{ i.detect_time }}暂时没有数据</td>
+						<td>
+                            <img src="{{ MEDIA_URL }}{{ i.img }}" width="20" height="20" onmouseenter="imgBig(this)" onmouseleave="imgSmall(this)" alt="传播路径图"/>{% empty %}暂时没有数据
+                        </td>
+                        <td>
+							<button class="layui-btn layui-btn-xs" onclick="updateBut()">修改</button>
+						</td>
+					</tr>
+                    {% endfor %}
+				</tbody>
+			</table>
+
+			<!-- layUI 分页模块 -->
+			<div id="pages"></div>
+			<script>
+				layui.use('laypage', function() {
+					var laypage = layui.laypage;
+
+					//总页数大于页码总数
+					laypage.render({
+					    elem: 'pages'
+					    ,count: 100
+					    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+					    ,jump: function(obj){
+//					      console.log(obj)
+					    }
+					});
+				});
+				//修改规格
+				function specificationsBut(){
+					layui.use('layer', function() {
+						var layer = layui.layer;
+
+						//iframe层-父子操作
+						layer.open({
+							type: 2,
+							area: ['70%', '60%'],
+							fixed: false, //不固定
+							maxmin: true,
+							content: 'specifications_list.html'
+						});
+					});
+
+				}
+				//修改按钮
+				var updateFrame = null;
+				function updateBut(){
+					layui.use('layer', function() {
+						var layer = layui.layer;
+
+						//iframe层-父子操作
+						updateFrame = layer.open({
+                    		title: "商品信息修改",
+							type: 2,
+							area: ['70%', '60%'],
+							scrollbar: false,	//默认：true,默认允许浏览器滚动，如果设定scrollbar: false，则屏蔽
+							maxmin: true,
+							content: 'goods_update.html'
+						});
+					});
+
+				}
+			</script>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../../static/login/css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../../static/login/css/iconfont.css">
+		<script type="text/javascript" src="../../../static/login/framework/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="../../../static/login/js/base.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../static/login/layui/css/layui.css">
+		<script type="text/javascript" src="../../../static/login/layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../../static/login/css/jquery.mCustomScrollbar.css">
+		<script src="../../../static/login/framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../../static/login/framework/jquery.mousewheel.min.js"></script>
+		<script src="../../../static/login/framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../../../static/login/framework/cframe.js"></script>
+		<!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+			textarea{
+				width: 100%;
+				height: auto;
+				max-height: 200px;
+				text-align: left;
+				margin: 10px 0;
+				padding: 10px;
+				border-radius: 5px;
+				border: 1px solid #CCC;
+				color: #555;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="cBody">
+
+			<div class="layui-collapse">
+				<!--模块 开始-->
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">tips提示功能</h2>
+					<div class="layui-colla-content">
+						<button class="layui-btn" onmouseenter="getTips(this, '我是tips提示内容')" onmouseleave="layer.closeAll('tips')">tips提示功能</button>
+						<textarea><button class="layui-btn" onmouseenter="getTips(this, '我是tips提示内容')" onmouseleave="layer.closeAll('tips')">tips提示功能</button></textarea>
+						<div>
+							<b>使用方法：</b><br/>
+							加入onmouseenter和onmouseleave事件函数即可。<br/>
+							onmouseenter事件获取tip，调用方法 getTips(this, '我是tips提示内容')<br/>
+							onmouseleave鼠标离开后tip消失 layer.closeAll('tips')
+						</div>
+					</div>
+				</div>
+				<!--模块 结束-->
+				<!--模块 开始-->
+				<div class="layui-colla-item">
+					<h2 class="layui-colla-title">JS获取当前日期</h2>
+					<div class="layui-colla-content">
+						<p id="test2"></p>
+						<script>
+							$(function(){
+								//时间计时器
+								setInterval(function(){
+								    $("#test2").html(getDate());
+								},500);
+							})
+						</script>
+						<textarea style="height: 140px;">
+<p id="test2"></p>
+$(function(){
+	//时间计时器
+	setInterval(function(){
+	    $("#test2").html(getDate());
+	},500);
+})
+						</textarea>
+						<div>
+							<b>使用方法：</b><br/>
+							getDate()方法返回值为：y+"/"+mo+"/"+d+"&nbsp;&nbsp;"+h+":"+m+":"+s。<br/>
+							如上的一个拼接字符串
+						</div>
+					</div>
+				</div>
+				<!--模块 结束-->
+			</div>
+			
+			
+
+			<script>
+				//注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+				layui.use('element', function() {
+					var element = layui.element;
+				});
+			</script>
+
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>谣言检测</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}"  media="all">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-data="data"></table>
+
+
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<div>
+     <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <label>
+                        <input type="text" name="name" required lay-verify="required" placeholder="输入谣言文件路径"
+                               autocomplete="off" class="layui-input">
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" class="layui-btn">导入谣言</button>
+                </div>
+            </div>
+        </form>
+<table class="layui-table">
+        <thead>
+        <tr>
+            <th>谣言id</th>
+            <th>谣言内容</th>
+            <th>检测结果</th>
+            <th>检测类型</th>
+            <th>检测时间</th>
+            <th>传播路径</th>
+            <th>操作</th>
+        </tr>
+    <tbody class="layui-table" id="biuuu_city_list"></tbody>
+    </table>
+    <div id="demo20"></div>
+    {{ lis }}
+</div>
+
+<script>
+    layui.use(['laypage', 'layer'], function() {
+        var laypage = layui.laypage
+            , layer = layui.layer;
+        //测试数据
+        var data ={{ lis|safe}}
+
+        //调用分页
+        laypage.render({
+            elem: 'demo20'
+            , count: data.length
+            , jump: function (obj) {
+                //模拟渲染
+                document.getElementById('biuuu_city_list').innerHTML = function () {
+                    var arr = []
+                        , thisData = data.concat().splice(obj.curr * obj.limit - obj.limit, obj.limit);
+                    layui.each(thisData, function (index, item) {
+                        arr.push('<tr>' +
+                            '<td>' + item['id'] + '</td>' +
+                            '<td>' + item['text'] + '</td>' +
+                            '<td>' + item['label'] + '</td>' +
+                            '<td>' + item['detect_time'] + '</td>' +
+                            {# '<td>' + '<a href="?id=' + item['img'] + '">' + '查看传播途径' + '</a>' + '</td>'+ #}
+                            '</tr>'
+
+                        );
+                    });
+                    return arr.join('');
+                }();
+            }
+        });
+    })
+</script>
+
+</body>
+</html>

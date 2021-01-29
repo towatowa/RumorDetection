@@ -1,0 +1,28 @@
+
+.errorPage{
+	width: 700px;
+	height: 600px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -350px;
+	margin-top: -300px;
+}
+.errorPage p{
+	text-align: center;
+	font-size: 24px;
+	color: #262626;
+	margin: 20px 0 40px 0;
+}
+.errorPage a{
+	display: block;
+	width: 340px;
+	height: 60px;
+	line-height: 60px;
+	border-radius: 30px;
+	text-align: center;
+	margin: 0 auto;
+	font-size: 24px;
+	color: #262626;
+	background-color: #15A848;
+}

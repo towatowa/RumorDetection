@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/iconfont.css">
+		<script type="text/javascript" src="../../../../static/login/framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/layui/css/layui.css">
+		<script type="text/javascript" src="../../../../static/login/layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/jquery.mCustomScrollbar.css">
+		<script src="../../../../static/login/framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mousewheel.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../../../../static/login/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+			body{
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				background: url(../../../../static/login/images/other/maintain_bottom.png) no-repeat center bottom;
+				background-size: 100% auto;
+			}
+			.midd{
+				width: 500px;
+				height: 320px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-top: -250px;
+				margin-left: -250px;
+			}
+			.midd img{
+				width: 500px;
+				height: 243px;
+			}
+			.midd p{
+				width: 100%;
+				height: 77px;
+				line-height: 77px;
+				text-align: center;
+				font-size: 24px;
+				color: #00bfb4;
+				background: url(../../../../static/login/images/other/maintain_pic_bg.png) no-repeat center bottom;
+				background-size: 80% auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="midd">
+			<img src="../../../../static/login/images/other/maintain_pic.png" />
+			<p>您访问的页面正在升级维护中...</p>
+		</div>
+		<script>
+			$(function(){
+				var win_h = $(window).height();
+				$("body").height(win_h);
+			})
+//			$(function(){
+//				var maintain_h = $('#mainIframe',parent.document).parents(window).height();
+//				console.log(maintain_h)
+//				$("body").height(maintain_h);
+//			})
+		</script>
+	</body>
+
+</html>

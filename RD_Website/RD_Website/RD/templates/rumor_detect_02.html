@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>长期谣言检测</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+    <link rel="shortcut icon" href="{% static 'login/image/index004.png' %}"/>
+    {# 顶部导航栏图片 #}
+    <link rel="bookmark" href="{% static 'login/image/index004.png' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'login/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'login/css/iconfont.css' %}">
+    <script type="text/javascript" src="{% static 'login/framework/jquery-1.11.3.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'login/layui/css/layui.css' %}">
+    <!--[if lt IE 9]>
+	      	<script src="{% static 'login/framework/html5shiv.min.js'%}"></script>
+	      	<script src="{% static 'login/framework/respond.min.js'%}"></script>
+	    <![endif]-->
+    <script type="text/javascript" src="{% static 'login/layui/layui.js' %}"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'login/css/jquery.mCustomScrollbar.css' %}">
+    <script src="{% static 'login/framework/jquery-ui-1.10.4.min.js' %}"></script>
+    <script src="{% static 'login/framework/jquery.mousewheel.min.js' %}"></script>
+    <script src="{% static 'login/framework/jquery.mCustomScrollbar.min.js' %}"></script>
+    <script src="{% static 'login/framework/cframe.js' %}"></script><!-- 仅供所有子页面使用 -->
+    <!-- 公共样式 结束 -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'login/css/frameStyle.css' %}">
+    <script type="text/javascript" src="{% static 'login/framework/frame.js' %}"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+
+<script src="{% static 'layui/layui.js' %}" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<div class="main">
+     <div>
+        {% if  accuracy %}
+            <div align="center" style="font-size:18px">本次检测的准确率为：{{ accuracy }}</div>
+        {% endif %}
+    </div>
+    <form class="layui-form" action="/RD/dt_02/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if  message %}
+            <div class="layui-form-item">
+
+                <script language="javascript"> //js脚本标注
+                confirm({{ message }}); //在页面上弹出确认对话框
+                </script>
+
+                <div style="font-size:22px">{{ message }}</div>
+            </div>
+        {% endif %}
+        <div class="layui-input-inline">
+            <input type="file" name="filename" class="layui-input" id="avatar"/>
+        </div>
+        <div class="layui-input-inline">
+            <button onclick="to_upload_file()" type="submit" class="layui-btn">上传文件</button>
+            <div style="text-align: left;display: inline-block;width: 300px; height: 20px; border: 1px solid #44A1F8; border-radius: 2px;position: relative">
+                <div id="progress_bar"
+                     style="display: inline-block; width: 0px; height: 20px;background-color: #64B587">
+
+                </div>
+                <div style="text-align: center;width: 300px;position: absolute; top: 0; font-size:16px; color: #413F43">
+                    <div id="loading">
+                        上传进度0%
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="keyword" placeholder="输入关键字" autocomplete="off" class="layui-input"/>
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" type="submit">检索</button>
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" type="submit" name="start_detection"
+                    onclick="display_alert('检测中，请稍后');hide('progress')">开始检测
+            </button>
+        </div>
+    </form>
+
+    <div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>
+                    <div style="width:50px">谣言id</div>
+                </th>
+                <th>
+                    <div style="...">谣言内容</div>
+                </th>
+                <th>
+                    <div style="...">检测结果</div>
+                </th>
+                <th>
+                    <div style="...">检测时间</div>
+                </th>
+                <th>
+                    <div style="...">传播路径</div>
+                </th>
+            </tr>
+            <tbody class="layui-table" id="biuuu_city_list"></tbody>
+        </table>
+        <div id="demo20"></div>
+    </div>
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //测试数据
+            var data = {{ datalist|safe }}
+
+                //调用分页
+                laypage.render({
+                    elem: 'demo20'
+                    , count: data.length
+                    , limit: 5
+                    , jump: function (obj) {
+                        //模拟渲染
+                        document.getElementById('biuuu_city_list').innerHTML = function () {
+                            var arr = []
+                                , thisData = data.concat().splice(obj.curr * obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function (index, item) {
+                                arr.push('<tr>' +
+                                    '<td>' + item['id'] + '</td>' +
+                                    '<td>' + item['text'] + '</td>' +
+                                    '<td>' + item['label'] + '</td>' +
+                                    '<td>' + item['detect_time'] + '</td>' +
+                                    '<td><button class="layui-btn layui-btn-xs" onclick=updateBut(\'' + item['img'] + '\')>查看传播路径图<button></td>' +
+                                    '</tr>'
+                                );
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+        })
+
+        function progressFunction(e) {
+            var progress_bar = document.getElementById("progress_bar");
+            var loading_dom = document.getElementById("loading");
+            var loading = Math.round(e.loaded / e.total * 100);
+            console.log("loading::", loading);
+
+            if (loading === 100) {
+                loading_dom.innerHTML = "上传成功^_^";
+            } else {
+                loading_dom.innerHTML = "上传进度" + loading + "%"
+            }
+
+            progress_bar.style.width = String(loading * 3) + "px";
+        }
+
+        // 上传成功
+        function uploadComplete(e) {
+            console.log("上传成功！", e);
+        }
+
+        // 上传失败
+        function uploadFailed(e) {
+            console.log("上传失败", e);
+        }
+
+        function to_upload_file() {
+            var file_obj = document.getElementById("avatar").files[0]
+            if (file_obj) {
+                var url = "/upload_file";
+                var form = new FormData();
+                form.append("file", file_obj);
+                var xhr = new XMLHttpRequest();
+                xhr.onload = uploadComplete; // 添加 上传成功后的回调函数
+                xhr.onerror = uploadFailed; // 添加 上传失败后的回调函数
+                xhr.upload.onprogress = progressFunction; // 添加 监听函数
+                xhr.open("POST", url, true);
+                xhr.send(form);
+            } else {
+                alert("请先选择文件后再上传")
+            }
+        }
+
+        function display_alert(content) {
+            alert(content)
+        }
+
+        function show(block_id) {
+            var odiv = document.getElementById(block_id);
+            odiv.style.display = 'block';
+        }
+
+        function hide(block_id) {
+            var odiv = document.getElementById(block_id);
+            odiv.style.display = 'none';
+        }
+
+        // 弹出框
+        var updateFrame = null;
+
+        function updateBut(test) {
+            var lj = test    // 文件路径
+            layui.use('layer', function () {
+                var layer = layui.layer;
+
+                //iframe层-父子操作       content: '/static/media/552783238415265792.png'
+                updateFrame = layer.open({
+                    title: "传播路径图",
+                    type: 2,
+                    area: ['55%', '80%'],
+                    scrollbar: false,	//默认：true,默认允许浏览器滚动，如果设定scrollbar: false，则屏蔽
+                    maxmin: true,
+                    content: lj
+                });
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

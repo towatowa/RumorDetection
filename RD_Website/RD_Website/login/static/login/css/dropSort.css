@@ -1,0 +1,68 @@
+
+.dropSort{
+	padding: 10px;
+	line-height: 40px;
+}
+.dropSort .box{
+	position: relative;
+}
+.dropSort .title{
+	width: 100px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
+.dropSort .con{
+	width: 100%;
+	padding-left: 100px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.dropSort .con .dropSortModil ul{
+	overflow: hidden;
+}
+.dropSort .con .dropSortModil ul li{
+	float: left;
+	width: 170px;
+	height: 210px;
+	padding: 15px;
+	border: 1px solid #EEE;
+	border-radius: 5px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	overflow: hidden;
+	background-color: #FFF;
+	list-style: none;
+    cursor: move;
+    overflow: hidden;
+}
+.dropSort .con .dropSortModil ul li img{
+	width: 170px;
+	height: 170px;
+}
+.dropSort .con .dropSortModil ul li .text{
+	width: 168px;
+	overflow: hidden;
+	margin-top: 10px;
+}
+.dropSort .con .dropSortModil ul li .text font{
+	float: left;
+	line-height: 30px;
+}
+.dropSort .con .dropSortModil ul li .text input{
+	float: left;
+	width: 75px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+}
+.dropSort .con .dropSortModil ul li .text a{
+	float: left;
+	margin-left: 5px;
+}
+.dropSort .but{
+	margin-top: 30px;
+}

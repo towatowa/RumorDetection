@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/iconfont.css">
+		<script type="text/javascript" src="../../../../static/login/framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/layui/css/layui.css">
+		<script type="text/javascript" src="../../../../static/login/layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../../../static/login/css/jquery.mCustomScrollbar.css">
+		<script src="../../../../static/login/framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mousewheel.min.js"></script>
+		<script src="../../../../static/login/framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../../../../static/login/framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+			.searchResult{
+				position: absolute;
+				top: 50px;
+				left: 15px;
+				z-index: 10;
+				background-color: #FFF;
+				width: 100px;
+				border: 1px solid #d2d2d2;
+				border-radius: 2px;
+			}
+			.searchResult li{
+			    padding: 0 10px;
+			    line-height: 36px;
+			    white-space: nowrap;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    cursor: pointer;
+			}
+			.searchResult li:hover{
+				background-color: #eee;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+				<div class="layui-form-item">
+					<a class="layui-btn" onclick="addCustomList('customList')">新增</a>
+				</div>
+			</div>
+			
+			<table id="customList" class="layui-table">
+				<thead>
+					<tr>
+						<th>分管名称</th>
+						<th>所属区域</th>
+						<th>负责人</th>
+						<th>联系方式</th>
+						<th>传真</th>
+						<th>邮箱</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>龙九山</td>
+						<td>无锡市</td>
+						<td>龙九山</td>
+						<td>18600001111</td>
+						<td>028-6666666</td>
+						<td>123456789@qq.com</td>
+						<td>
+							<a class="layui-btn layui-btn-xs" onclick="delCustomList(this)">删除</a>
+						</td>
+					</tr>
+					<tr>
+						<td>龙九山</td>
+						<td>无锡市</td>
+						<td>龙九山</td>
+						<td>18600001111</td>
+						<td>028-6666666</td>
+						<td>123456789@qq.com</td>
+						<td>
+							<a class="layui-btn layui-btn-xs" onclick="delCustomList(this)">删除</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<script>
+			//根据2018.03.01日 张家港客户需求改版的要求，在新的后台框架中提供以下功能
+			//此功能只适用与提前加载后，进行搜索；
+
+			//新增
+			function addCustomList(id){
+				var str = '<tr>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input" onkeyup="seachKeyup(this)">'+
+							'</td>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input">'+
+							'</td>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input">'+
+							'</td>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input">'+
+							'</td>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input">'+
+							'</td>'+
+							'<td>'+
+							    '<input type="tel" name="phone" lay-verify="required" autocomplete="off" class="layui-input">'+
+							'</td>'+
+							'<td>'+
+								'<a class="layui-btn layui-btn-xs" onclick="delCustomList(this)">删除</a>'+
+							'</td>'+
+						'</tr>';
+				$("#"+id).append(str);
+				
+				//重新初始化Iframe的高度
+				cframeInit();
+			}
+			
+			//搜索按钮弹起
+			function seachKeyup(_this){
+				var w = $(_this).width()+10;
+				$(_this).siblings().remove();
+				
+				var str = '<ul class="searchResult" style="width: '+w+'px">'+
+						'<li onclick="seachChoose(this)">测试11</li>'+
+						'<li onclick="seachChoose(this)">测试11</li>'+
+						'<li onclick="seachChoose(this)">测试11</li>'+
+						'<li onclick="seachChoose(this)">测试11</li>'+
+					'</ul>';
+				$(_this).after(str);
+				
+				//点击其他地方搜索下拉框消失
+				$(document).click(function(){
+					$(".searchResult").remove();
+				});
+				
+				//点击input也消失
+				$(_this).click(function(){
+					$(".searchResult").remove();
+				});
+			}
+			//搜索下拉选项选中
+			function seachChoose(_this){
+				$(_this).parent().siblings("input").val($(_this).text());
+			}
+			
+			//删除
+			function delCustomList(_this){
+				layui.use(['form','laydate'], function() {
+					layer.confirm('确定要删除么？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						$(_this).parent().parent().remove();
+						layer.msg('删除成功', {
+							icon: 1
+						});
+					}, function() {
+						layer.msg('取消删除', {
+							time: 2000 //20s后自动关闭
+						});
+					});
+				});
+			}
+
+		</script>
+	</body>
+
+</html>
