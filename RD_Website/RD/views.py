@@ -329,13 +329,13 @@ def read_list(file):
 def search_02(request, keyword):
     datalist = []
     try:
-        posts = models.Twitter.objects.filter(Q(user_id=request.session['user_id'])&Q(src_twt__contains=keyword))
+        posts = models.Twitter.objects.filter(Q(user_id=request.session['user_id']) & Q(src_twt__contains=keyword))
         # print(posts)
         for post in posts:
             if post.label == 1:
                 data = dict()
                 data['id'] = post.id
-                data['text'] = eval(post.src_twt)["text"]
+                data['text'] = json.loads(post.src_twt)["text"]
                 data['label'] = str(post.label)
                 data['detect_time'] = datetime.now().strftime("%Y-%m-%d")
                 data['img'] = '/static/media/' + models.IMG.objects.get(twitter_id=post.id).name
