@@ -172,7 +172,6 @@ def rumor_detect_02(request):
         return render(request, 'rumor_detect_02.html')
 
 
-
 def rumor_detect_00(request):
     return render(request, 'rumor_detect_03.html')
 
@@ -229,6 +228,31 @@ def rumor_detect_03(request):
                 rumor_data_each = dict()  # 每条谣言的相关信息
                 # 调用谣言检测函数
                 judge = cx_model_net.detection(data_handle[i])
+                # 将数据集保存到数据库
+                try:
+                    one_src = models.Twitter()  # 一条原贴
+
+                    # 初始化原贴
+                    one_src.src_twt = json.loads(original_data[i][0])  # 原题
+                    one_src.true_label = int(json.loads(original_data[i][1]))  # 真实标签
+                    one_src.user_id = user_id  # 用户id
+                    one_src.detect_type = 3  # 检测类型
+                    one_src.label = judge
+                    # 向数据库插入数据
+                    one_src.save()
+                    twitter_id = models.Twitter.objects.all().order_by('-id').first().id  # 新插入值的id
+                    # 读取评论列表
+                    for t in original_data[i][2:]:
+                        one_comment = models.Content()  # 一条评论
+                        one_comment.text = t
+                        one_comment.twitter_id = twitter_id
+                        one_comment.save()  # 保存到数据库
+                except Exception as e:
+                    print('str(Exception):\t', str(Exception))
+                    print('str(e):\t\t', str(e))
+                    print('repr(e):\t', repr(e))
+                    print('########################################################')  # 捕获异常
+                    return render(request, 'rumor_detect_02.html', locals())
 
                 if judge == original_data[i][1]:
                     correct_number += 1
@@ -239,30 +263,6 @@ def rumor_detect_03(request):
                     # 获取检测的当前时间
                     time_str = datetime.strftime(datetime.now(), '%Y-%m-%d')
                     rumor_data_each['detect_time'] = time_str  # 检测时间
-                    # 将数据集保存到数据库
-                    try:
-                        one_src = models.Twitter()  # 一条原贴
-
-                        # 初始化原贴
-                        one_src.src_twt = json.loads(original_data[i][0])  # 原题
-                        one_src.true_label = int(json.loads(original_data[i][1]))  # 真实标签
-                        one_src.user_id = user_id  # 用户id
-                        one_src.detect_type = 3  # 检测类型
-                        # 向数据库插入数据
-                        one_src.save()
-                        twitter_id = models.Twitter.objects.all().order_by('-id').first().id  # 新插入值的id
-                        # 读取评论列表
-                        for t in original_data[i][2:]:
-                            one_comment = models.Content()  # 一条评论
-                            one_comment.text = t
-                            one_comment.twitter_id = twitter_id
-                            one_comment.save()  # 保存到数据库
-                    except Exception as e:
-                        print('str(Exception):\t', str(Exception))
-                        print('str(e):\t\t', str(e))
-                        print('repr(e):\t', repr(e))
-                        print('########################################################')  # 捕获异常
-                        return render(request, 'rumor_detect_02.html', locals())
 
                     # 画传播路径图
                     cb_data_all = []
@@ -306,6 +306,7 @@ def rumor_detect_03(request):
                     message = '未查询到包含相关关键词的贴子'
                     return render(request, 'rumor_detect_03.html', locals())
     return render(request, 'rumor_detect_03.html', locals())
+
 
 def redirect2dt_01(request):
     return redirect('RD.views.rumor_detect_02')
@@ -439,15 +440,15 @@ def rumor_detect_01(request):
                         print('repr(e):\t', repr(e))
                         print('########################################################')  # 捕获异常'''
                 num_c = 0
-                num = len(labels)
+                num_post = len(labels)
                 num_post = 0
-                for i in range(num):
+                for i in range(num_post):
                     if labels[i] == labels_pre[i]:
                         num_c += 1
                     if labels_pre[i] == '1':
                         num_post += 1
-                accuracy = num_c / num
-                datalist = show_page(request, num)
+                accuracy = num_c / num_post
+                datalist = show_page(request, num_post)
                 if len(datalist):
                     message = "检测成功！共检测到" + str(len(datalist)) + "条谣言"
                 else:
@@ -477,7 +478,6 @@ def rumor_detect_01(request):
 
 
 def rumor_detect_04(request):
-
     """谣言检测方法1"""
     # 获取输入框的值
     user_id = request.session['user_id']
