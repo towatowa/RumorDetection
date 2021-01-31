@@ -50,7 +50,7 @@
       <recent name="D:\Pycharm\RD_Website\RD\rumor_model\chenfuguan" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.RD_Website">
+  <component name="RunManager" selected="Django 服务器.RD_Website">
     <configuration name="0001_initial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="RD_Website" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -186,7 +186,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Django Server.RD_Website" />
+      <item itemvalue="Django 服务器.RD_Website" />
       <item itemvalue="Python.0001_initial" />
       <item itemvalue="Python.dection" />
       <item itemvalue="Python.manage" />

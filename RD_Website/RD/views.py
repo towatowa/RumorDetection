@@ -179,6 +179,7 @@ def rumor_detect_00(request):
 
 def rumor_detect_03(request):
     """长期谣言检测"""
+    user_id = request.session['user_id']  # 用户id
     file = request.FILES.get('filename')  # 获取谣言文件对象
     jiance = request.POST.get('jiance')
     keyword = request.POST.get('keyword')
@@ -238,6 +239,30 @@ def rumor_detect_03(request):
                     # 获取检测的当前时间
                     time_str = datetime.strftime(datetime.now(), '%Y-%m-%d')
                     rumor_data_each['detect_time'] = time_str  # 检测时间
+                    # 将数据集保存到数据库
+                    try:
+                        one_src = models.Twitter()  # 一条原贴
+
+                        # 初始化原贴
+                        one_src.src_twt = json.loads(original_data[i][0])  # 原题
+                        one_src.true_label = int(json.loads(original_data[i][1]))  # 真实标签
+                        one_src.user_id = user_id  # 用户id
+                        one_src.detect_type = 3  # 检测类型
+                        # 向数据库插入数据
+                        one_src.save()
+                        twitter_id = models.Twitter.objects.all().order_by('-id').first().id  # 新插入值的id
+                        # 读取评论列表
+                        for t in original_data[i][2:]:
+                            one_comment = models.Content()  # 一条评论
+                            one_comment.text = t
+                            one_comment.twitter_id = twitter_id
+                            one_comment.save()  # 保存到数据库
+                    except Exception as e:
+                        print('str(Exception):\t', str(Exception))
+                        print('str(e):\t\t', str(e))
+                        print('repr(e):\t', repr(e))
+                        print('########################################################')  # 捕获异常
+                        return render(request, 'rumor_detect_02.html', locals())
 
                     # 画传播路径图
                     cb_data_all = []
