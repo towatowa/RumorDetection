@@ -237,7 +237,7 @@ def rumor_detect_03(request):
                     one_src.true_label = int(json.loads(original_data[i][1]))  # 真实标签
                     one_src.user_id = user_id  # 用户id
                     one_src.detect_type = 3  # 检测类型
-                    one_src.label = judge
+                    one_src.label = int(judge)
                     # 向数据库插入数据
                     one_src.save()
                     twitter_id = models.Twitter.objects.all().order_by('-id').first().id  # 新插入值的id
@@ -324,7 +324,7 @@ def read_list(file):
 def search_02(request, keyword):
     datalist = []
     try:
-        posts = models.Twitter.objects.filter(Q(src_twt__contains=keyword))
+        posts = models.Twitter.objects.filter(Q(user_id=request.session['user_id'])&Q(src_twt__contains=keyword))
         # print(posts)
         for post in posts:
             if post.label == 1:

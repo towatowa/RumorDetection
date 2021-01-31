@@ -11,23 +11,28 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 from collections import deque
+
 sys.path.append(".")
 from RD.rumor_model.my_edr.dataUtils_CN import *
 import json
 from RD.rumor_model.my_edr.RDM_Model import *
 from RD.rumor_model.my_edr.CM_Model import *
 import tqdm
+
 # import pdb
 torch.backends.cudnn.enabled = False
 
 import warnings
+
 warnings.filterwarnings("ignore")
+
 
 class LayerNormLSTMCell(nn.LSTMCell):
     '''
     
     
     '''
+
     def __init__(self, input_size, hidden_size, dropout=0.0, bias=True, use_layer_norm=True):
         super().__init__(input_size, hidden_size, bias)
         self.use_layer_norm = use_layer_norm
@@ -51,7 +56,7 @@ class LayerNormLSTMCell(nn.LSTMCell):
         weight_hh = nn.functional.dropout(self.weight_hh, p=self.dropout, training=self.training)
         if self.use_layer_norm:
             gates = self.ln_ih(F.linear(input, self.weight_ih, self.bias_ih)) \
-                     + self.ln_hh(F.linear(hx, weight_hh, self.bias_hh))
+                    + self.ln_hh(F.linear(hx, weight_hh, self.bias_hh))
         else:
             gates = F.linear(input, self.weight_ih, self.bias_ih) \
                     + F.linear(hx, weight_hh, self.bias_hh)
@@ -67,6 +72,7 @@ class LayerNormLSTMCell(nn.LSTMCell):
         else:
             hy = o_ * torch.tanh(cy)
         return hy, cy
+
 
 class LayerNormLSTM(nn.Module):
     def __init__(self,
@@ -96,7 +102,8 @@ class LayerNormLSTM(nn.Module):
         if self.bidirectional:
             self.hidden1 = nn.ModuleList([
                 LayerNormLSTMCell(input_size=(input_size if layer == 0 else hidden_size * num_directions),
-                                  hidden_size=hidden_size, dropout=weight_dropout, bias=bias, use_layer_norm=use_layer_norm)
+                                  hidden_size=hidden_size, dropout=weight_dropout, bias=bias,
+                                  use_layer_norm=use_layer_norm)
                 for layer in range(num_layers)
             ])
 
@@ -164,7 +171,7 @@ class LayerNormLSTM(nn.Module):
                     ct[t][l1] = ct_ * seq_len_mask[t]
                     h1, c1 = ht[t][l1], ct[t][l1]
 
-                xs = [torch.cat((h[l0]*dropout_mask[l][0], h[l1]*dropout_mask[l][1]), dim=1) for h in ht]
+                xs = [torch.cat((h[l0] * dropout_mask[l][0], h[l1] * dropout_mask[l][1]), dim=1) for h in ht]
                 ht_temp = torch.stack([torch.stack([h[l0], h[l1]]) for h in ht])
                 ct_temp = torch.stack([torch.stack([c[l0], c[l1]]) for c in ct])
                 if len(hy) == 0:
@@ -175,7 +182,7 @@ class LayerNormLSTM(nn.Module):
                     cy = torch.stack(list(ct_temp.gather(dim=0, index=indices).squeeze(0)))
                 else:
                     cy = torch.cat((cy, torch.stack(list(ct_temp.gather(dim=0, index=indices).squeeze(0)))), dim=0)
-            y  = torch.stack(xs)
+            y = torch.stack(xs)
         else:
             # if use cuda, change 'torch.LongTensor' to 'torch.cuda.LongTensor'
             indices = (torch.LongTensor(seq_lens) - 1).unsqueeze(1).unsqueeze(0).unsqueeze(0).repeat(
@@ -197,7 +204,7 @@ class LayerNormLSTM(nn.Module):
                 ht[t] = torch.stack(ht[t])
                 ct[t] = torch.stack(ct[t])
                 h, c = ht[t], ct[t]
-            y = torch.stack([h[-1]*dropout_mask[-1] for h in ht])
+            y = torch.stack([h[-1] * dropout_mask[-1] for h in ht])
             hy = torch.stack(list(torch.stack(ht).gather(dim=0, index=indices).squeeze(0)))
             cy = torch.stack(list(torch.stack(ct).gather(dim=0, index=indices).squeeze(0)))
 
@@ -209,24 +216,29 @@ class pooling_layer(nn.Module):
     '''
     将输入的不同长度的谣言文本统一成每一个batch一样长度的文本
     '''
+
     def __init__(self, input_dim, output_dim):
         # n*300 , 1*300
         super(pooling_layer, self).__init__()
         self.linear = nn.Linear(input_dim, output_dim)
         self.input_dim = input_dim
         self.output_dim = output_dim
-        
+
     def forward(self, inputs, cuda=False):
-        inputs_sent = [torch.cat([self.linear(sent_tensor.cuda() if cuda else sent_tensor).max(axis=0)[0].unsqueeze(0) for sent_tensor in seq]) for seq in inputs]
-        #torch.cat():tensor拼接函数
-        seqs = torch.nn.utils.rnn.pad_sequence(inputs_sent, batch_first=True,padding_value=0)
-        #torch.nn.utils.rnn.pad_sequence(label_tokens, batch_first=True, padding_value=-1)
-        #label_tokens:list矩阵，batch_first=默认第一维度。
+        inputs_sent = [torch.cat(
+            [self.linear(sent_tensor.cuda() if cuda else sent_tensor).max(axis=0)[0].unsqueeze(0) for sent_tensor in
+             seq]) for seq in inputs]
+        # torch.cat():tensor拼接函数
+        seqs = torch.nn.utils.rnn.pad_sequence(inputs_sent, batch_first=True, padding_value=0)
+        # torch.nn.utils.rnn.pad_sequence(label_tokens, batch_first=True, padding_value=-1)
+        # label_tokens:list矩阵，batch_first=默认第一维度。
 
         return seqs
 
+
 class pooling_layer2(nn.Module):
     '''没有用到'''
+
     def __init__(self, input_dim, output_dim):
         super(pooling_layer2, self).__init__()
         self.linear = nn.Linear(input_dim, output_dim)
@@ -240,20 +252,21 @@ class pooling_layer2(nn.Module):
         seqs = torch.nn.utils.rnn.pad_sequence(inputs_sent, batch_first=True)
         return seqs
 
+
 class RDM_Model(nn.Module):
     def __init__(self, word_embedding_dim, sent_embedding_dim, hidden_dim, dropout_prob):
-        #300 ，300， 256（Hi）， 0.2
+        # 300 ，300， 256（Hi）， 0.2
         super(RDM_Model, self).__init__()
         self.embedding_dim = sent_embedding_dim
         self.hidden_dim = hidden_dim
         self.gru_model = nn.GRU(word_embedding_dim,
                                 self.hidden_dim,
-                                batch_first=True, 
+                                batch_first=True,
                                 dropout=dropout_prob
-                            )  # 输入维度 300，隐层256，层数默认，2
+                                )  # 输入维度 300，隐层256，层数默认，2
         self.DropLayer = nn.Dropout(dropout_prob)
 
-    def forward(self, input_x): 
+    def forward(self, input_x):
         """
         input_x: [batchsize, max_seq_len, sentence_embedding_dim] 
         x_len: [batchsize]
@@ -268,18 +281,20 @@ class RDM_Model(nn.Module):
             raise
         return df_outputs
 
+
 class RDM_Model_V1(nn.Module):
     '''没有用到'''
+
     def __init__(self, word_embedding_dim, sent_embedding_dim, hidden_dim, dropout_prob):
         super(RDM_Model_V1, self).__init__()
         self.embedding_dim = sent_embedding_dim
         self.hidden_dim = hidden_dim
-        self.gru_model = LayerNormLSTM(word_embedding_dim, 
-                                self.hidden_dim, 
-                                dropout=dropout_prob
-                            )
+        self.gru_model = LayerNormLSTM(word_embedding_dim,
+                                       self.hidden_dim,
+                                       dropout=dropout_prob
+                                       )
 
-    def forward(self, input_x, seq_lens): 
+    def forward(self, input_x, seq_lens):
         """
         input_x: [batchsize, max_seq_len, sentence_embedding_dim] 
         x_len: [batchsize]
@@ -291,6 +306,7 @@ class RDM_Model_V1(nn.Module):
         df_outputs, (df_last_state, df_last_cell) = self.gru_model(input_x.transpose(0, 1), (h0, c0), seq_lens)
         return df_outputs.transpose(0, 1), df_last_state.transpose(0, 1), df_last_cell.transpose(0, 1)
 
+
 class CM_Model_V1(nn.Module):
     def __init__(self, hidden_dim, action_num):
         # hidden_dim=256 ,action_num = 2
@@ -299,7 +315,7 @@ class CM_Model_V1(nn.Module):
         self.action_num = action_num
         self.DenseLayer = nn.Linear(self.hidden_dim, 64)
         self.Classifier = nn.Linear(64, self.action_num)
-        
+
     def forward(self, rdm_state):
         """
         rdm_state: [batchsize, hidden_dim]
@@ -314,31 +330,32 @@ class CM_Model_V1(nn.Module):
         isStop = stopScore.argmax(axis=1)
         return stopScore, isStop
 
+
 class CM_Model(nn.Module):
     def __init__(self, sentence_embedding_dim, hidden_dim, action_num):
         super(CM_Model, self).__init__()
         self.sentence_embedding_dim = sentence_embedding_dim
         self.hidden_dim = hidden_dim
         self.action_num = action_num
-#         self.PoolLayer = pooling_layer(self.embedding_dim,
-#                                             self.hidden_dim)
+        #         self.PoolLayer = pooling_layer(self.embedding_dim,
+        #                                             self.hidden_dim)
         self.DenseLayer = nn.Linear(self.hidden_dim, 64)
         self.Classifier = nn.Linear(64, self.action_num)
-        
+
     def forward(self, rdm_model, rl_input, rl_state):
         """
         rl_input: [batchsize, max_word_num, sentence_embedding_dim]
         rl_state: [1, batchsize, hidden_dim]
         """
-        assert(rl_input.ndim==3)
+        assert (rl_input.ndim == 3)
         batchsize, max_word_num, embedding_dim = rl_input.shape
         rl_output, rl_new_state = rdm_model.gru_model(
-                                            rl_input, 
-                                            rl_state
-                                        )
+            rl_input,
+            rl_state
+        )
         rl_h1 = nn.functional.relu(
             self.DenseLayer(
-#                 rl_state.reshape([len(rl_input), self.hidden_dim]) #it is not sure to take rl_state , rather than rl_output, as the feature
+                #                 rl_state.reshape([len(rl_input), self.hidden_dim]) #it is not sure to take rl_state , rather than rl_output, as the feature
                 rl_output.reshape(
                     [len(rl_input), self.hidden_dim]
                 )
@@ -349,22 +366,18 @@ class CM_Model(nn.Module):
         return stopScore, isStop, rl_new_state
 
 
- # 词嵌入层，word2vec 模型预训练好。
-rdm_model = RDM_Model(300, 300, 256, 0.2)   # 初始化，GRU,
-sent_pooler = pooling_layer(300, 300)       # 池化层,
-rdm_classifier = nn.Linear(256, 2)          # rdm 分类
-cm_model = CM_Model_V1(256, 2)               # cm_model
+# 词嵌入层，word2vec 模型预训练好。
+rdm_model = RDM_Model(300, 300, 256, 0.2)  # 初始化，GRU,
+sent_pooler = pooling_layer(300, 300)  # 池化层,
+rdm_classifier = nn.Linear(256, 2)  # rdm 分类
+cm_model = CM_Model_V1(256, 2)  # cm_model
 
 
 class adict(dict):
     ''' Attribute dictionary - a convenience data structure, similar to SimpleNamespace in python 3.3
         One can use attributes to read/write dictionary content.
     '''
+
     def __init__(self, *av, **kav):
         dict.__init__(self, *av, **kav)
         self.__dict__ = self
-
-
-
-
-

@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'RD_Website.wsgi.application'
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rummer_db',
+        'NAME': 'rumor_db',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'root',
         'HOST': '127.0.0.1',  # 连接主机，默认本机ma
         'PORT': 3306, # 端口 默认3306
         'OPTIONS': {'init_command': 'SET default_storage_engine=INNODB;'
