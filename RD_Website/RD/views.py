@@ -278,7 +278,12 @@ def rumor_detect_03(request):
                             cb_data_all.append(cb_data_id)
                     # 调用画图函数，画传播过程图
                     image_name = cb_gc.draw_pic(cb_data_all)
-
+                    # 将图片名保存到数据库
+                    img = models.IMG()
+                    img.image_path = 'RD/static/media/'
+                    img.name = '/' + image_name + '.png'
+                    img.twitter_id = models.Twitter.objects.all().order_by('-id').first().id  # 新插入值的id
+                    img.save()
                     # 传播路径图的地址
                     img_address = '/static/media/' + image_name + '.png'
 
@@ -330,14 +335,18 @@ def search_02(request, keyword):
             if post.label == 1:
                 data = dict()
                 data['id'] = post.id
-                data['text'] = json.loads(post.src_twt)['text']
-                data['label'] = post.label
+                data['text'] = eval(post.src_twt)["text"]
+                data['label'] = str(post.label)
                 data['detect_time'] = datetime.now().strftime("%Y-%m-%d")
                 data['img'] = '/static/media/' + models.IMG.objects.get(twitter_id=post.id).name
                 datalist.append(data)
         # print(datalist)
         return datalist
-    except:
+    except Exception as e:
+        print('str(Exception):\t', str(Exception))
+        print('str(e):\t\t', str(e))
+        print('repr(e):\t', repr(e))
+        print('########################################################')  # 捕获异常
         return datalist
 
 
