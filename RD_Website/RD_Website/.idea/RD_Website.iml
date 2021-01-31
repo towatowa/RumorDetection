@@ -4,8 +4,8 @@
     <facet type="django" name="Django">
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$" />
-        <option name="settingsModule" value="RD_Website/settings.py" />
-        <option name="manageScript" value="$MODULE_DIR$/manage.py" />
+        <option name="settingsModule" value="settings.py" />
+        <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
         <option name="trackFilePattern" value="migrations" />
@@ -14,26 +14,10 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Python 3.6 (pytorch)" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="bootstrap" level="application" />
-    <orderEntry type="library" name="jquery" level="application" />
-    <orderEntry type="library" name="popper" level="application" />
-  </component>
-  <component name="PyNamespacePackagesService">
-    <option name="namespacePackageFolders">
-      <list>
-        <option value="$MODULE_DIR$/RD/rumor_model" />
-        <option value="$MODULE_DIR$/RD/CX_RD" />
-      </list>
-    </option>
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
-    <option name="TEMPLATE_FOLDERS">
-      <list>
-        <option value="$MODULE_DIR$/../RD_Website\templates" />
-      </list>
-    </option>
   </component>
 </module>
